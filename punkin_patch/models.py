@@ -5,6 +5,9 @@ from django.core.exceptions import ValidationError
 class Character(models.Model):
     name = models.CharField(max_length=100, unique=True)
 
+    def get_absolute_url(self):
+        return f"/character/{self.pk}/"
+
 class PatchTemplate(models.Model):
     name = models.CharField(max_length=100, unique=True)
 
