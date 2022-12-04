@@ -49,7 +49,7 @@ class VotePatchResult(models.Model):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['voteID', 'patchResultsID'], name='No duplicate votes in patch results')
+            models.UniqueConstraint(fields=['voteID', 'patchResultID'], name='No duplicate votes in patch results')
         ]
 
     def validate_characters_in_patch(self, characters, patch):
@@ -61,17 +61,17 @@ class VotePatchResult(models.Model):
     def clean(self):
         vote = Vote.objects.get(pk=self.voteID)
         characters = [vote.characterID1, vote.characterID2]
-        patch = PatchResults.objects.get(pk=self.patchResultsID).patchID
+        patch = PatchResult.objects.get(pk=self.patchResultID).patchID
         self.validate_characters_in_patch(characters, patch)
 
     voteID = models.ForeignKey(
         "Vote", on_delete=models.CASCADE
     )
-    patchResultsID = models.ForeignKey(
-        "PatchResults", on_delete=models.CASCADE
+    patchResultID = models.ForeignKey(
+        "PatchResult", on_delete=models.CASCADE
     )
 
-class PatchResults(models.Model):
+class PatchResult(models.Model):
 
     name = models.CharField(max_length=100, unique=True)
     patchID = models.ForeignKey(
