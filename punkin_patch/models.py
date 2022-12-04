@@ -53,15 +53,15 @@ class VotePatchResult(models.Model):
         ]
 
     def validate_characters_in_patch(self, characters, patch):
-        charactersInPatch = CharacterPatch.objects.filter(patchID=patch).only("characterID")
+        charactersInPatch = [x.characterID for x in CharacterPatch.objects.filter(patchID=patch.id).only("characterID")]
         for character in characters:
             if not character in charactersInPatch:
                 raise ValidationError("Character: {} is not in Patch: {}".format(character, patch))
 
     def clean(self):
-        vote = Vote.objects.get(pk=self.voteID)
+        vote = Vote.objects.get(id=self.voteID.id)
         characters = [vote.characterID1, vote.characterID2]
-        patch = PatchResult.objects.get(pk=self.patchResultID).patchID
+        patch = PatchResult.objects.get(id=self.patchResultID.id).patchID
         self.validate_characters_in_patch(characters, patch)
 
     voteID = models.ForeignKey(
