@@ -52,6 +52,7 @@ class VotePatchResult(models.Model):
             models.UniqueConstraint(fields=['voteID', 'patchResultID'], name='No duplicate votes in patch results')
         ]
 
+    #TODO: This is a candidate for refactor. Probably a more efficient method of doing this
     def validate_characters_in_patch(self, characters, patch):
         charactersInPatch = [x.characterID for x in CharacterPatch.objects.filter(patchID=patch.id).only("characterID")]
         for character in characters:
